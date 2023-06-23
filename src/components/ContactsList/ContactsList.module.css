@@ -1,0 +1,34 @@
+
+.contactsList {
+  margin: 20px 0;
+  list-style: inside;
+}
+
+/* ОЦЕНТРОВАТЬ КНОПКУ!!!!! */
+
+.contactsList li {
+  display: flex;
+  align-items: center;
+}
+
+.contactsList li::before {
+  content: "•";
+  margin-right: 5px;
+  font-size: 24px;
+} 
+
+.contactsList li:not(:last-child) {
+  margin-bottom: 15px;
+}
+
+.contactsList button {
+  flex-grow: 1;
+  width: 74px;
+  margin-left: auto;
+  margin-right: 15px;
+  padding: 4px;
+}
+
+.contactsList .content {
+  width: 250px;
+}

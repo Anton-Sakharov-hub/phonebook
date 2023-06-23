@@ -1,0 +1,18 @@
+.filter {
+  display: flex;
+  flex-direction: column;
+  margin: 15px auto;
+  padding-left: 30px;
+}
+
+.filterWrap {
+  display: flex;
+}
+
+.filter h3 {
+  margin-right: 15px;
+}
+
+.filter input {
+  min-width: 290px;
+}
