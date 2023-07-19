@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Form from './Form';
 import Filter from './Filter';
 import Section from './Section';
 import ContactsList from './ContactsList/ContactsList';
+import Button from './Button/Button';
 
 const CONTACTS = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -11,9 +12,27 @@ const CONTACTS = [
   { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
 ];
 
+const lclStorageKey = 'contacts';
+
 export const App = () => {
-  const [contacts, setContact] = useState([...CONTACTS]);
+  const [contacts, setContact] = useState([]);
   const [filterInput, setFilter] = useState('');
+
+  useEffect(() => {
+    const hasKey = Boolean(localStorage.getItem(lclStorageKey));
+    if (!hasKey)
+      localStorage.setItem(lclStorageKey, JSON.stringify([...CONTACTS]));
+
+    setContact(() => JSON.parse(localStorage.getItem(lclStorageKey)));
+  }, []);
+
+  useEffect(() => {
+    return () => {
+      // console.log('unmount')
+      localStorage.setItem(lclStorageKey, JSON.stringify([...contacts]));
+    };
+    
+  });
 
   function onFilterChange(evt) {
     setFilter(evt.currentTarget.value);
@@ -31,24 +50,25 @@ export const App = () => {
 
   // сделать метод с хорошей производительностью для удаления
   function deleteContact(id) {
-    setContact(contacts.filter(contact => contact.id !== id));
+    setContact(() => {
+      const clearedContacts = contacts.filter(contact => contact.id !== id);
+
+      localStorage.setItem(lclStorageKey, JSON.stringify([...clearedContacts]));
+
+      return clearedContacts;
+    });
   }
 
   return (
     <div>
-      <Form setContact={setContact} />
-      <Section title="Contacts">
-        <Filter
-          // contacts={contacts}
-          // deleteHandler={deleteContact}
-          onFilterChange={onFilterChange}
-          value={filterInput}
-        />
-        <ContactsList
-          contacts={filtredContacts}
-          deleteHandler={deleteContact}
-        />
-      </Section>
+          <Form setContact={setContact} />
+          <Section title="Contacts">
+            <Filter onFilterChange={onFilterChange} value={filterInput} />
+            <ContactsList
+              contacts={filtredContacts}
+              deleteHandler={deleteContact}
+            />
+          </Section>
     </div>
   );
 };
