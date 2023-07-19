@@ -1,18 +1,22 @@
 .filter {
   display: flex;
   flex-direction: column;
-  margin: 15px auto;
-  padding-left: 30px;
+  margin: 15px 0 0 12px;
+  /* margin-left: 30px; */
 }
 
 .filterWrap {
   display: flex;
 }
 
-.filter h3 {
+.filter label {
   margin-right: 15px;
+  font-size: 24px;
+  font-weight: 500;
+  flex-shrink: 0;
 }
 
 .filter input {
-  min-width: 290px;
+  width: 100%;
+  font-size: 18px;
 }

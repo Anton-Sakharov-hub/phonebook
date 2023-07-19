@@ -2,6 +2,7 @@ import { useState } from 'react';
 import Form from './Form';
 import Filter from './Filter';
 import Section from './Section';
+import ContactsList from './ContactsList/ContactsList';
 
 const CONTACTS = [
   { id: 'id-1', name: 'Rosie Simpson', number: '459-12-56' },
@@ -12,19 +13,42 @@ const CONTACTS = [
 
 export const App = () => {
   const [contacts, setContact] = useState([...CONTACTS]);
+  const [filterInput, setFilter] = useState('');
+
+  function onFilterChange(evt) {
+    setFilter(evt.currentTarget.value);
+  }
+
+  const filtredContacts = contacts.filter(
+    ({ name, number }) =>
+      name
+        .toLocaleLowerCase()
+        .includes(filterInput.toLocaleLowerCase().trim()) ||
+      number
+        .toLocaleLowerCase()
+        .includes(filterInput.toLocaleLowerCase().trim())
+  );
 
   // сделать метод с хорошей производительностью для удаления
   function deleteContact(id) {
-    setContact(contacts.filter(contact => contact.id !== id))
+    setContact(contacts.filter(contact => contact.id !== id));
   }
 
   return (
     <div>
       <Form setContact={setContact} />
       <Section title="Contacts">
-        <Filter contacts={contacts} deleteHandler={deleteContact}/>
+        <Filter
+          // contacts={contacts}
+          // deleteHandler={deleteContact}
+          onFilterChange={onFilterChange}
+          value={filterInput}
+        />
+        <ContactsList
+          contacts={filtredContacts}
+          deleteHandler={deleteContact}
+        />
       </Section>
-
     </div>
   );
 };
